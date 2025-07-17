@@ -1,0 +1,393 @@
+
+# 2025-07-16 13:06:12.131414
++create a table on roster page with columns username with profile link, total number of articles authored, total number of favourites received on their articles, date of first posted the article. show 0 if there is any undefined data or null. fetch data from database using API and load more button if records are more than 10, show 10 records on each click on load more button. table content should be dynamically updated like if someone has any new entry, table should be dynamically updated
+
+# 2025-07-16 13:06:24.720907
++y
+
+# 2025-07-16 13:08:14.117836
++fix the error in toster.component.ts
+
+# 2025-07-16 13:08:47.319060
++fix the errors in toster.component.ts
+
+# 2025-07-16 13:09:40.332552
++load more button should be visible only if there are rows more than 10
+
+# 2025-07-16 13:12:45.099625
++fix the sign in error, it says 504 gateway timeout
+
+# 2025-07-16 13:14:19.351822
++fix the error in user.service.ts
+
+# 2025-07-16 13:14:59.398822
++fix the errors in user.service.ts
+
+# 2025-07-16 13:15:35.904926
++fix the error in user.service.ts
+
+# 2025-07-16 13:16:31.897905
++fix the backend error
+
+# 2025-07-16 13:17:27.624921
++update article.entity.ts to fix user.entity.ts error
+
+# 2025-07-16 13:17:32.818841
++y
+
+# 2025-07-16 13:18:24.589153
++fix the error in  article.entity.ts
+
+# 2025-07-16 13:18:58.231334
++fix the backend error in  article.entity.ts
+
+# 2025-07-16 13:19:56.459948
++fix the frontend error
+
+# 2025-07-16 13:20:58.699446
++I am unable to stay on roster page, fix the error
+
+# 2025-07-16 13:21:52.106757
++style the table on roster page so that each row has alternate color
+
+# 2025-07-16 13:23:14.104102
++roster page should not redirect me to the home page without click
+
+# 2025-07-16 13:24:53.202712
++why roster page is redirecting to the home page
+
+# 2025-07-16 13:25:41.284903
++pull the data through API and show into the table on roster page
+
+# 2025-07-16 13:26:16.028140
++fix the fontend errors 
+
+# 2025-07-16 13:27:12.801844
++delete the redirect from roster to home page
+
+# 2025-07-16 13:27:44.072471
++open the roster page by default
+
+# 2025-07-16 13:28:29.935678
++fix the api error on roster page
+
+# 2025-07-16 13:29:22.158722
++pull the data from database and show into the table on roster page
+
+# 2025-07-16 13:30:48.041150
++remove the API call and pull the data from database and show into table on roster page
+
+# 2025-07-16 13:31:29.880467
++y
+
+# 2025-07-16 13:32:29.027162
++show the data pulled from database into table on roster page
+
+# 2025-07-16 13:33:04.223953
++revert last change
+
+# 2025-07-16 13:33:54.449503
++pull user data from database and show into the table on roster page accordingly
+
+# 2025-07-16 13:35:03.001185
++fix roster page issue and load properly
+
+# 2025-07-16 13:37:49.557319
++remove the api
+
+# 2025-07-16 13:39:54.766699
++create a new API which pull user data and show into the table on roster page
+
+# 2025-07-16 13:40:39.198746
++y
+
+# 2025-07-16 13:43:25.695031
++create a new API request which pull user data like username, profileLink, articlesCount, favouriteCount,FirstArticleDate from database and show the data into table on roster page 
+
+# 2025-07-16 13:44:46.461170
++show the fetched data into table on roster page
+
+# 2025-07-16 13:47:17.366046
++update roster.component.html so that it's showing fetched user data into table  
+
+# 2025-07-16 13:48:49.213430
++roster page isn't showing the table content
+
+# 2025-07-16 13:50:09.736578
++show the data fetched from /api/users/stats?offset=0&limit=10 in to the table on roster page
+
+# 2025-07-16 13:51:35.274275
++show table content
+
+# 2025-07-16 13:52:41.857086
++show fetched content from API into roster component table
+
+# 2025-07-16 13:53:11.148590
++pass api data to roster component
+
+# 2025-07-16 13:56:12.127458
++show load more button by default
+
+# 2025-07-16 14:07:35.902827
++show data into table on roster page
+
+# 2025-07-16 14:08:47.685080
++ngfor loor is not working with tr fix that
+
+# 2025-07-16 14:12:12.700824
++add support of ngFor in <tr> in roster.component.html
+
+# 2025-07-16 14:15:52.703303
++fix the runtime error on roster.component.html
+
+# 2025-07-16 14:17:06.503493
++upgrade angular version which supports *ngFor
+
+# 2025-07-16 14:17:16.002349
++y
+
+# 2025-07-16 14:17:38.109075
++/run npm install
+
+# 2025-07-16 14:17:38.109155
++/run npm install
+
+# 2025-07-16 14:17:50.514541
++y
+
+# 2025-07-16 14:29:52.154442
++show users content in table in roster.component.html without *ngFor
+
+# 2025-07-16 14:31:44.470615
++show users data into roster page table
+
+# 2025-07-16 14:32:15.043123
++why *ngFor is not working 
+
+# 2025-07-16 14:32:45.943971
++fix roster.component.ts
+
+# 2025-07-16 14:33:48.048527
++show less than 10 rows by default and load more button when rows are more then 10
+
+# 2025-07-16 14:35:12.193875
++don't show load more button by default, load more button should visible only when rows are more than 10
+
+# 2025-07-16 14:36:00.379323
++show table content by deafult on page load
+
+# 2025-07-16 14:36:51.332224
++remove the load more logic
+
+# 2025-07-16 14:37:28.846516
++fix the error in roster.component.ts
+
+# 2025-07-16 14:38:05.052868
++show the table content on roster page load
+
+# 2025-07-16 14:43:57.604079
++add a load more button which load 10 more rown on click, load more will be visible only if feched object is morethan 10
+
+# 2025-07-16 14:44:18.234043
++y
+
+# 2025-07-16 14:44:41.834416
++fix the error in roster.component.ts
+
+# 2025-07-16 14:45:45.053844
++fix the frontend error in roster.component.ts
+
+# 2025-07-16 14:46:23.358278
++fix the error in roster.component.ts
+
+# 2025-07-16 14:47:23.961282
++revert the load more logic
+
+# 2025-07-16 14:48:31.080991
++show fetched data into table by default on page load
+
+# 2025-07-16 14:49:51.478510
++add the pagination or something which handle the large number of rows in future
+
+# 2025-07-16 14:50:37.935912
++show load more button
+
+# 2025-07-16 14:51:45.656139
++don't show load more if data is less than 10 rows
+
+# 2025-07-16 14:52:38.202400
++load more button should be visible only if fehced object lenght is more than 10
+
+# 2025-07-16 14:53:10.516722
++revert the load more button logic
+
+# 2025-07-16 14:53:39.985483
++show the fetched data into the table on page load
+
+# 2025-07-16 14:54:28.678749
++revert last 3 prompt
+
+# 2025-07-16 14:54:51.330628
++revert another 1 prompt
+
+# 2025-07-16 14:55:19.714258
++show fetched data into table on page load
+
+# 2025-07-16 14:56:28.910698
++show data as soon as url changed to roster
+
+# 2025-07-16 14:57:13.040391
++load table content whenever click on Roster
+
+# 2025-07-16 14:58:19.719879
++load the data as soon as I click on Roster button in menu section
+
+# 2025-07-16 15:06:22.478123
++update the api/users/stats and pull the total favourites of the user received on articles
+
+# 2025-07-16 15:07:47.077496
++revert the last prompt
+
+# 2025-07-16 15:10:43.432715
++npm run submit
+
+# 2025-07-16 15:10:52.285764
++y
+
+# 2025-07-16 15:11:17.748021
++/run npm run submit
+
+# 2025-07-16 15:11:17.748124
++/run npm run submit
+
+# 2025-07-16 15:11:33.736774
++y
+
+# 2025-07-16 15:24:13.899334
++revert the angular version
+
+# 2025-07-16 15:25:18.589499
++y
+
+# 2025-07-16 15:25:18.592504
++/run npm install
+
+# 2025-07-16 15:25:18.592630
++/run npm install
+
+# 2025-07-16 15:26:11.671361
++y
+
+# 2025-07-16 15:27:46.994760
++fix npm run submit issue
+
+# 2025-07-16 15:28:05.027872
++y
+
+# 2025-07-16 15:28:05.031003
++/run npm run submit
+
+# 2025-07-16 15:28:05.031116
++/run npm run submit
+
+# 2025-07-16 15:28:26.024351
++Y
+
+# 2025-07-16 15:40:39.935216
++fix AxiosError
+
+# 2025-07-16 15:41:03.286403
++y
+
+# 2025-07-16 15:41:03.289030
++/run npm run submit
+
+# 2025-07-16 15:41:03.289100
++/run npm run submit
+
+# 2025-07-16 15:41:23.002828
++y
+
+# 2025-07-16 15:41:46.683590
++fix AxiosError in node_modules
+
+# 2025-07-16 15:42:07.517446
++Y
+
+# 2025-07-16 15:42:07.520343
++/run npm run submit
+
+# 2025-07-16 15:42:07.520412
++/run npm run submit
+
+# 2025-07-16 15:42:16.708644
++Y
+
+# 2025-07-16 15:43:33.075067
++fix AxiosError in node_modules
+
+# 2025-07-16 15:43:51.527174
++Y
+
+# 2025-07-16 15:43:51.530310
++/run npm run submit
+
+# 2025-07-16 15:43:51.530402
++/run npm run submit
+
+# 2025-07-16 15:43:59.236709
++Y
+
+# 2025-07-16 15:47:13.240968
++fix AxiosError in node_modules
+
+# 2025-07-16 15:47:28.131800
++y
+
+# 2025-07-16 15:47:28.134468
++/run npm run submit
+
+# 2025-07-16 15:47:28.134548
++/run npm run submit
+
+# 2025-07-16 15:47:34.753535
++y
+
+# 2025-07-16 15:57:29.218544
++fix AxiosError in node_modules
+
+# 2025-07-16 15:58:16.025416
++y
+
+# 2025-07-16 15:58:16.028047
++/run npm run submit
+
+# 2025-07-16 15:58:16.028117
++/run npm run submit
+
+# 2025-07-16 15:58:23.414929
++y
+
+# 2025-07-16 15:58:48.873467
++fix AxiosError in node_modules AxiosError: getaddrinfo ENOTFOUND actual-api-url.com
+
+# 2025-07-16 15:59:02.154901
++y
+
+# 2025-07-16 15:59:02.157527
++/run npm run submit
+
+# 2025-07-16 15:59:02.157603
++/run npm run submit
+
+# 2025-07-16 15:59:08.976522
++y
+
+# 2025-07-16 16:07:46.670144
++load the table content when we switch to roster tab
+
+# 2025-07-16 16:09:46.332954
++fetch data on application load and show content in table as soon as user switched to roster menu tab
+
+# 2025-07-16 16:10:25.922040
++y
