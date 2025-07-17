@@ -1,0 +1,230 @@
+diff --git a/apps/backend/src/article/article.entity.ts b/apps/backend/src/article/article.entity.ts
+index 5e7b831..42fd2cf 100644
+--- a/apps/backend/src/article/article.entity.ts
++++ b/apps/backend/src/article/article.entity.ts
+@@ -8,6 +8,7 @@ import {
+   PrimaryKey,
+   Property,
+   wrap,
++  ManyToMany,
+ } from '@mikro-orm/core';
+ import slug from 'slug';
+ 
+@@ -46,6 +47,8 @@ export class Article {
+   @OneToMany(() => Comment, (comment) => comment.article, { eager: true, orphanRemoval: true })
+   comments = new Collection<Comment>(this);
+ 
++  @ManyToMany(() => User, (user) => user.favorites, { hidden: true })
++  favoritedBy = new Collection<User>(this);
+   @Property({ type: 'number' })
+   favoritesCount = 0;
+ 
+diff --git a/apps/backend/src/user/user.controller.ts b/apps/backend/src/user/user.controller.ts
+index 99ff0c9..b186319 100644
+--- a/apps/backend/src/user/user.controller.ts
++++ b/apps/backend/src/user/user.controller.ts
+@@ -1,4 +1,4 @@
+-import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UsePipes } from '@nestjs/common';
++import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, UsePipes, Query } from '@nestjs/common';
+ import { ValidationPipe } from '../shared/pipes/validation.pipe';
+ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
+ import { User } from './user.decorator';
+@@ -18,6 +18,11 @@ export class UserController {
+     return this.userService.findByEmail(email);
+   }
+ 
++  @Get('users/stats')
++  async getUserStatistics(@Query('offset') offset: number = 0, @Query('limit') limit: number = 10) {
++    return this.userService.getUserStatistics(offset, limit);
++  }
++
+   @Put('user')
+   async update(@User('id') userId: number, @Body('user') userData: UpdateUserDto) {
+     return this.userService.update(userId, userData);
+diff --git a/apps/backend/src/user/user.service.ts b/apps/backend/src/user/user.service.ts
+index db55068..1858c35 100644
+--- a/apps/backend/src/user/user.service.ts
++++ b/apps/backend/src/user/user.service.ts
+@@ -6,6 +6,7 @@ import { EntityManager, wrap } from '@mikro-orm/core';
+ import { SECRET } from '../config';
+ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
+ import { User } from './user.entity';
++import { Article } from '../article/article.entity'; // Ensure Article is imported
+ import { IUserRO } from './user.interface';
+ import { UserRepository } from './user.repository';
+ 
+@@ -17,13 +18,37 @@ export class UserService {
+     return this.userRepository.findAll();
+   }
+ 
++  async getUserStatistics(offset: number = 0, limit: number = 10): Promise<any> {
++    const users = await this.userRepository.findAll({ offset, limit });
++    const userStats = await Promise.all(users.map(async (user) => {
++      const articles = await this.em.count(Article, { author: user });
++      const favorites = await this.em.count(Article, { author: user, favoritedBy: { $exists: true, $ne: null } });
++      const firstArticle = await this.em.findOne(Article, { author: user }, { orderBy: { createdAt: 'ASC' } });
++
++      return {
++        username: user.username,
++        profileLink: `/profiles/${user.username}`,
++        articlesCount: articles || 0,
++        favoritesCount: favorites || 0,
++        firstArticleDate: firstArticle ? firstArticle.createdAt : 'N/A',
++      };
++    }));
++
++    return userStats;
++  }
++
+   async findOne(loginUserDto: LoginUserDto): Promise<User> {
+     const findOneOptions = {
+       email: loginUserDto.email,
+       password: crypto.createHmac('sha256', loginUserDto.password).digest('hex'),
+     };
+ 
+-    return (await this.userRepository.findOne(findOneOptions))!;
++    const user = await this.userRepository.findOne(findOneOptions);
++    if (!user) {
++      console.error('User not found or incorrect credentials');
++      throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
++    }
++    return user;
+   }
+ 
+   async create(dto: CreateUserDto): Promise<IUserRO> {
+diff --git a/libs/roster/src/lib/roster.component.html b/libs/roster/src/lib/roster.component.html
+index c65158e..50adac2 100644
+--- a/libs/roster/src/lib/roster.component.html
++++ b/libs/roster/src/lib/roster.component.html
+@@ -1 +1,36 @@
+-<p>TODO</p>
++<style>
++  table {
++    width: 100%;
++    border-collapse: collapse;
++  }
++  th, td {
++    padding: 8px;
++    text-align: left;
++    border-bottom: 1px solid #ddd;
++  }
++  tr:nth-child(even) {
++    background-color: #f2f2f2;
++  }
++  tr:nth-child(odd) {
++    background-color: #ffffff;
++  }
++</style>
++
++<table>
++  <thead>
++    <tr>
++      <th>Username</th>
++      <th>Total Articles</th>
++      <th>Total Favourites</th>
++      <th>First Article Date</th>
++    </tr>
++  </thead>
++  <tbody>
++    <tr *ngFor="let user of users">
++      <td><a [href]="user.profileLink">{{ user.username }}</a></td>
++      <td>{{ user.articlesCount }}</td>
++      <td>{{ user.favoritesCount }}</td>
++      <td>{{ user.firstArticleDate | date:'mediumDate' }}</td>
++    </tr>
++  </tbody>
++</table>
+diff --git a/libs/roster/src/lib/roster.component.ts b/libs/roster/src/lib/roster.component.ts
+index b75cc0f..1c04eb9 100644
+--- a/libs/roster/src/lib/roster.component.ts
++++ b/libs/roster/src/lib/roster.component.ts
+@@ -1,11 +1,36 @@
+-import { Component } from '@angular/core';
++import { Component, OnInit } from '@angular/core';
++import { CommonModule } from '@angular/common';
++import { UserStatsService } from './user-stats.service';
++
++interface UserStats {
++  username: string;
++  profileLink: string;
++  articlesCount: number;
++  favoritesCount: number;
++  firstArticleDate: string;
++}
+ 
+ @Component({
+   selector: 'realworld-roster',
+   templateUrl: './roster.component.html',
+   styleUrls: [],
+   providers: [],
+-  imports: [],
++  imports: [CommonModule],
+   standalone: true,
+ })
+-export class RosterComponent {}
++export class RosterComponent implements OnInit {
++  users: UserStats[] = [];
++
++  constructor(private userStatsService: UserStatsService) {}
++
++  ngOnInit() {
++    this.userStatsService.getUserStatistics()
++      .subscribe(data => {
++        this.users = data;
++      }, error => {
++        console.error('Error fetching user statistics:', error);
++      });
++  }
++
++
++}
+diff --git a/libs/roster/src/lib/user-stats.service.ts b/libs/roster/src/lib/user-stats.service.ts
+new file mode 100644
+index 0000000..ed28e60
+--- /dev/null
++++ b/libs/roster/src/lib/user-stats.service.ts
+@@ -0,0 +1,22 @@
++import { Injectable } from '@angular/core';
++import { HttpClient } from '@angular/common/http';
++import { Observable } from 'rxjs';
++
++interface UserStats {
++  username: string;
++  profileLink: string;
++  articlesCount: number;
++  favoritesCount: number;
++  firstArticleDate: string;
++}
++
++@Injectable({
++  providedIn: 'root',
++})
++export class UserStatsService {
++  constructor(private http: HttpClient) {}
++
++  getUserStatistics(): Observable<UserStats[]> {
++    return this.http.get<UserStats[]>(`/api/users/stats`);
++  }
++}
+diff --git a/submit.ts b/submit.ts
+index 55d64d7..5e222cf 100644
+--- a/submit.ts
++++ b/submit.ts
+@@ -10,7 +10,7 @@ const SUBMISSION_DIR = 'submission';
+ const ASSESSMENT_TYPE = 'feature-development';
+ const ASSESSMENT_VERSION = 'v4';
+ const ASSESSMENT_BRANCH = `rwa/${ASSESSMENT_TYPE}-${ASSESSMENT_VERSION}`;
+-const API_URL = 'iyuja327ulc6hq3xsypufut7bh0lygdq.ynzoqn-hey.hf-rnfg-1.ba.njf';
++const API_URL = 'https://your-correct-api-url.com'; // Replace with the actual API URL
+ const REPO_GIT_URL = 'https://github.com/trilogy-group/ws-eng-conduit-ai-assessment.git';
+ 
+ function decode(s: string): string {
+@@ -179,7 +179,7 @@ async function createZip(): Promise<Buffer> {
+ }
+ 
+ async function uploadSubmission(zip: Buffer, name: string, email: string): Promise<void> {
+-  const apiUrl = `https://${decode(API_URL)}/`;
++  const apiUrl = `${API_URL}/`;
+   const jsonBody = { name, email, size: zip.byteLength, type: ASSESSMENT_TYPE };
+ 
+   try {
