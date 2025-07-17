@@ -1,0 +1,36 @@
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+</style>
+
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Total Articles</th>
+      <th>Total Favourites</th>
+      <th>First Article Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td><a [href]="user.profileLink">{{ user.username }}</a></td>
+      <td>{{ user.articlesCount }}</td>
+      <td>{{ user.favoritesCount }}</td>
+      <td>{{ user.firstArticleDate | date:'mediumDate' }}</td>
+    </tr>
+  </tbody>
+</table>
